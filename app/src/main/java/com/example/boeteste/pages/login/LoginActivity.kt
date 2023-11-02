@@ -79,7 +79,8 @@ fun LoginScreen() {
                 parteLeve = "de volta",
                 boldFirst = true,
                 fontSize = 43,
-                quebrarTexto = true
+                quebrarTexto = true,
+                modifier = null
             )
         }
 
