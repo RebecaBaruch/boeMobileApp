@@ -63,6 +63,8 @@ fun HomeScreen(){
     ) {
         Header()
 
+        Spacer(modifier = Modifier.height(13.dp))
+
         Column{
 
             MixedTitle(
@@ -99,7 +101,7 @@ fun HomeScreen(){
             }
         }
 
-        Spacer(modifier = Modifier.height(23.dp))
+        Spacer(modifier = Modifier.height(43.dp))
 
         GraphicBox()
 
@@ -129,7 +131,7 @@ fun TotalRegisterBox(
                 .padding(33.dp)
         ){
             Text(
-                text = totalRegisterNum.toString() + "%",
+                text = "${totalRegisterNum}%",
                 fontSize = 43.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -138,7 +140,7 @@ fun TotalRegisterBox(
 
             Text(
                 text = "Registros",
-                fontSize = 17.sp,
+                fontSize = 13.sp,
                 fontWeight = FontWeight.Bold
             )
         }
