@@ -293,7 +293,7 @@ fun GraphicBox() {
     }
 }
 
-@Preview
+@Preview(showBackground = true, widthDp = 424)
 @Composable
 fun HomeScreenPreview(){
     HomeScreen()
