@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,7 +48,8 @@ class ProfileAccountActivity : ComponentActivity() {
 fun ProfileAccountScreen() {
     Column(
         modifier = Modifier
-            .padding(33.dp),
+            .padding(33.dp)
+            .fillMaxHeight(),
         verticalArrangement = Arrangement.Center
     ) {
         Column {
@@ -56,7 +58,7 @@ fun ProfileAccountScreen() {
                 contentDescription = null
             )
 
-            Spacer(modifier = Modifier.height(33.dp))
+            Spacer(modifier = Modifier.height(63.dp))
             
             Column {
                 Text(
@@ -73,7 +75,7 @@ fun ProfileAccountScreen() {
                 )
             }
 
-            Spacer(modifier = Modifier.height(33.dp))
+            Spacer(modifier = Modifier.height(63.dp))
 
             Row {
                 Image(

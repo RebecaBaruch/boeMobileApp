@@ -110,7 +110,7 @@ fun RegistroScreen() {
         ) {
             //nome
             LabeledInput(
-                icon = R.drawable.user_icon,
+                icon = R.drawable.user_gray_icon,
                 label = "Nome",
                 value = "",
                 onValueChange = {}
