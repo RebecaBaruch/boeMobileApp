@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -62,61 +63,66 @@ class HomeActivity : ComponentActivity() {
 @Composable
 fun HomeScreen(){
     Column(
-        modifier = Modifier
-            .padding(
-                horizontal = 33.dp
-            )
-    ) {
-        Header()
-
-        Spacer(modifier = Modifier.height(13.dp))
-
-        Column{
-
-            MixedTitle(
-                parteNegrito = "Olá,",
-                parteLeve = "Rebeca!",
-                fontSize = 33,
-                quebrarTexto = false,
-                boldFirst = true,
-                modifier = Modifier
-                    .padding(vertical = 23.dp)
-            )
+        modifier = Modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.SpaceBetween
+    ){
+        Column(
+            modifier = Modifier
+                .padding(
+                    horizontal = 33.dp
+                )
+        ) {
+            Header()
 
             Spacer(modifier = Modifier.height(13.dp))
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                TotalRegisterBox(
-                    totalRegisterNum = 7,
-                    modifier = Modifier.weight(1f)
+            Column {
+
+                MixedTitle(
+                    parteNegrito = "Olá,",
+                    parteLeve = "Rebeca!",
+                    fontSize = 33,
+                    quebrarTexto = false,
+                    boldFirst = true,
+                    modifier = Modifier
+                        .padding(vertical = 23.dp)
                 )
 
-                Spacer(modifier = Modifier.width(23.dp))
+                Spacer(modifier = Modifier.height(13.dp))
 
-                PositiveRegisteredBox(
-                    totalPositiveNum = 30,
-                    posAddNum = 10,
-                    negAddnum = 17,
-                    modifier = Modifier.weight(1f)
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TotalRegisterBox(
+                        totalRegisterNum = 7,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    Spacer(modifier = Modifier.width(23.dp))
+
+                    PositiveRegisteredBox(
+                        totalPositiveNum = 30,
+                        posAddNum = 10,
+                        negAddnum = 17,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
+
+            Spacer(modifier = Modifier.height(43.dp))
+
+            GraphicBox()
         }
 
-        Spacer(modifier = Modifier.height(43.dp))
-
-        GraphicBox()
+        var selectedNavItem by remember { mutableStateOf(NavItem.HOME) }
+        NavMenu(
+            selectedNavItem = selectedNavItem,
+            onNavItemClicked = { selectedNavItem = it }
+        )
     }
-
-    var selectedNavItem by remember { mutableStateOf(NavItem.HOME) }
-    NavMenu(
-        selectedNavItem = selectedNavItem,
-        onNavItemClicked = { selectedNavItem = it }
-    )
 }
 
 @Composable
@@ -307,5 +313,6 @@ fun GraphicBox() {
 @Preview(showBackground = true, widthDp = 424)
 @Composable
 fun HomeScreenPreview(){
-    HomeScreen()
+    /* val viewModel: NavigationViewModel by viewModels()
+    HomeScreen(viewModel) */
 }

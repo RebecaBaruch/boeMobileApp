@@ -15,12 +15,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,7 +45,9 @@ import androidx.compose.ui.unit.sp
 import com.example.boeteste.R
 import com.example.boeteste.components.backButton.BackButton
 import com.example.boeteste.components.labeledInput.LabeledInput
+import com.example.boeteste.pages.editProfile.components.ExcludeAccountButton
 import com.example.boeteste.pages.editProfile.ui.theme.BoeTesteTheme
+import com.example.boeteste.ui.theme.PatternGray
 
 class EditProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -177,6 +179,18 @@ fun EditProfileScreen() {
                 .background(color = Color.Transparent)
         )
 
+        Spacer(modifier = Modifier.height(53.dp))
+
+        Divider(
+            color = PatternGray,
+            thickness = 0.5.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(53.dp))
+
+        ExcludeAccountButton {}
     }
 }
 

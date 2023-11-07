@@ -151,5 +151,4 @@ fun NavMenuPreview(){
         selectedNavItem = selectedNavItem,
         onNavItemClicked = { selectedNavItem = it }
     )
-
 }
