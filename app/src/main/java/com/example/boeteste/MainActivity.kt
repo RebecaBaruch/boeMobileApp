@@ -20,8 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.boeteste.pages.HomeScreen
-import com.example.boeteste.pages.login.LoginScreen
-import com.example.boeteste.pages.registro.RegistroScreen
+import com.example.boeteste.pages.editProfile.EditProfileScreen
 import com.example.boeteste.ui.theme.PatternGray
 
 class MainActivity : ComponentActivity() {
@@ -30,7 +29,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Surface {
-                    HomeScreen()
+                    EditProfileScreen()
                 }
             }
         }

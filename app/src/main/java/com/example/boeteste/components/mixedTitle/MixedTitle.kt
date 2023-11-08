@@ -28,7 +28,8 @@ fun MixedTitle(
     parteLeve: String,
     fontSize: Int, // Agora estamos usando um Int para representar o tamanho da fonte
     quebrarTexto: Boolean,
-    boldFirst: Boolean
+    boldFirst: Boolean,
+    modifier: Modifier?
 ) {
     val textStyleBold = TextStyle(
         fontSize = fontSize.sp,
@@ -44,7 +45,7 @@ fun MixedTitle(
 
     if(quebrarTexto){
         Column(
-            modifier = Modifier
+            modifier = modifier!!
                 .padding(vertical = 3.dp, horizontal = 13.dp)
         ) {
             if (boldFirst) {
