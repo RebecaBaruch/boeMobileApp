@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.boeteste.R
 import com.example.boeteste.components.backButton.BackButton
 import com.example.boeteste.components.labeledInput.LabeledInput
@@ -59,7 +61,7 @@ class EditProfileActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    EditProfileScreen()
+                    //EditProfileScreen()
                 }
             }
         }
@@ -67,7 +69,7 @@ class EditProfileActivity : ComponentActivity() {
 }
 
 @Composable
-fun EditProfileScreen() {
+fun EditProfileScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .padding(
@@ -84,7 +86,9 @@ fun EditProfileScreen() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             BackButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController.popBackStack()
+                },
                 icon = Icons.Default.ArrowBack,
                 contentDescription = "Arrow back icon"
             )
@@ -197,5 +201,5 @@ fun EditProfileScreen() {
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 fun EditProfileScreenPreview() {
-    EditProfileScreen()
+    //EditProfileScreen()
 }

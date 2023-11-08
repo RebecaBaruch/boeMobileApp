@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.boeteste.R
 import com.example.boeteste.pages.profileAccount.components.ExitButton
 import com.example.boeteste.pages.profileAccount.ui.theme.BoeTesteTheme
@@ -37,7 +40,7 @@ class ProfileAccountActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ProfileAccountScreen()
+                    //ProfileAccountScreen()
                 }
             }
         }
@@ -45,14 +48,15 @@ class ProfileAccountActivity : ComponentActivity() {
 }
 
 @Composable
-fun ProfileAccountScreen() {
+fun ProfileAccountScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
-            .padding(33.dp)
-            .fillMaxHeight(),
+            .padding(33.dp),
         verticalArrangement = Arrangement.Center
     ) {
         Column {
+            Spacer(modifier = Modifier.height(63.dp))
+
             Image(
                 painter = painterResource(R.drawable.user_icon),
                 contentDescription = null
@@ -77,10 +81,14 @@ fun ProfileAccountScreen() {
 
             Spacer(modifier = Modifier.height(63.dp))
 
-            Row {
+            Row(
+                modifier = Modifier.clickable {
+                    navController.navigate("editProfileAccount")
+                }
+            ) {
                 Image(
                     painter = painterResource(R.drawable.edit_icon),
-                    contentDescription = null
+                    contentDescription = null,
                 )
 
                 Spacer(modifier = Modifier.width(23.dp))
@@ -139,6 +147,6 @@ fun ProfileAccountScreen() {
 @Composable
 fun ProfileAccountScreenPreview() {
     BoeTesteTheme {
-        ProfileAccountScreen()
+        //ProfileAccountScreen()
     }
 }
