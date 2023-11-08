@@ -80,7 +80,7 @@ fun LoginScreen() {
                 boldFirst = true,
                 fontSize = 43,
                 quebrarTexto = true,
-                modifier = null
+                modifier = Modifier
             )
         }
 

@@ -26,13 +26,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.boeteste.R
 import com.example.boeteste.ui.theme.PrimaryBlue
 
 @Composable
 fun NavMenu(
     selectedNavItem: NavItem,
-    onNavItemClicked: (NavItem) -> Unit
+    onNavItemClicked: (NavItem) -> Unit,
+    navController: NavHostController
 ) {
     Box(
         modifier = Modifier
@@ -58,7 +60,10 @@ fun NavMenu(
             NavIcon(
                 icon = R.drawable.home,
                 selected = selectedNavItem == NavItem.HOME,
-                onClick = { onNavItemClicked(NavItem.HOME) }
+                onClick = {
+                    onNavItemClicked(NavItem.HOME)
+                    navController.navigate("home")
+                }
             )
 
             //cowList
@@ -92,7 +97,10 @@ fun NavMenu(
             NavIcon(
                 icon = R.drawable.user_nav_icon,
                 selected = selectedNavItem == NavItem.PROFILE,
-                onClick = { onNavItemClicked(NavItem.PROFILE) }
+                onClick = {
+                    onNavItemClicked(NavItem.PROFILE)
+                    navController.navigate("profileAccount")
+                }
             )
         }
 
@@ -147,8 +155,8 @@ enum class NavItem {
 fun NavMenuPreview(){
     var selectedNavItem by remember { mutableStateOf(NavItem.HOME) }
 
-    NavMenu(
+    /*NavMenu(
         selectedNavItem = selectedNavItem,
         onNavItemClicked = { selectedNavItem = it }
-    )
+    )*/
 }

@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.boeteste.R
 import com.example.boeteste.components.header.Header
 import com.example.boeteste.components.mixedTitle.MixedTitle
@@ -53,7 +54,7 @@ class HomeActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    HomeScreen()
+                    //HomeScreen()
                 }
             }
         }
@@ -63,66 +64,56 @@ class HomeActivity : ComponentActivity() {
 @Composable
 fun HomeScreen(){
     Column(
-        modifier = Modifier.fillMaxHeight(),
-        verticalArrangement = Arrangement.SpaceBetween
-    ){
-        Column(
-            modifier = Modifier
-                .padding(
-                    horizontal = 33.dp
-                )
-        ) {
-            Header()
+        modifier = Modifier
+            .padding(
+                horizontal = 33.dp
+            )
+    ) {
+        Header()
+
+        Spacer(modifier = Modifier.height(13.dp))
+
+        Column {
+
+            MixedTitle(
+                parteNegrito = "Olá,",
+                parteLeve = "Rebeca!",
+                fontSize = 33,
+                quebrarTexto = false,
+                boldFirst = true,
+                modifier = Modifier
+                    .padding(vertical = 23.dp)
+            )
 
             Spacer(modifier = Modifier.height(13.dp))
 
-            Column {
-
-                MixedTitle(
-                    parteNegrito = "Olá,",
-                    parteLeve = "Rebeca!",
-                    fontSize = 33,
-                    quebrarTexto = false,
-                    boldFirst = true,
-                    modifier = Modifier
-                        .padding(vertical = 23.dp)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TotalRegisterBox(
+                    totalRegisterNum = 7,
+                    modifier = Modifier.weight(1f)
                 )
 
-                Spacer(modifier = Modifier.height(13.dp))
+                Spacer(modifier = Modifier.width(23.dp))
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TotalRegisterBox(
-                        totalRegisterNum = 7,
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    Spacer(modifier = Modifier.width(23.dp))
-
-                    PositiveRegisteredBox(
-                        totalPositiveNum = 30,
-                        posAddNum = 10,
-                        negAddnum = 17,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
+                PositiveRegisteredBox(
+                    totalPositiveNum = 30,
+                    posAddNum = 10,
+                    negAddnum = 17,
+                    modifier = Modifier.weight(1f)
+                )
             }
-
-            Spacer(modifier = Modifier.height(43.dp))
-
-            GraphicBox()
         }
 
-        var selectedNavItem by remember { mutableStateOf(NavItem.HOME) }
-        NavMenu(
-            selectedNavItem = selectedNavItem,
-            onNavItemClicked = { selectedNavItem = it }
-        )
+        Spacer(modifier = Modifier.height(43.dp))
+
+        GraphicBox()
     }
+
 }
 
 @Composable
