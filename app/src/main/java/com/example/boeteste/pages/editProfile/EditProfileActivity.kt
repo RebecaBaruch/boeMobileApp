@@ -69,7 +69,10 @@ class EditProfileActivity : ComponentActivity() {
 }
 
 @Composable
-fun EditProfileScreen(navController: NavHostController) {
+fun EditProfileScreen(
+    navController: NavHostController,
+    onLogout: () -> Unit
+) {
     Column(
         modifier = Modifier
             .padding(
@@ -194,7 +197,9 @@ fun EditProfileScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(53.dp))
 
-        ExcludeAccountButton {}
+        ExcludeAccountButton {
+            onLogout()
+        }
     }
 }
 

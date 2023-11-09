@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.boeteste.R
 import com.example.boeteste.components.backButton.BackButton
 import com.example.boeteste.components.defaultButton.DefaultButton
@@ -38,9 +39,8 @@ class RegistroActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BoeTesteTheme {
-                // A surface container using the 'background' color from the theme
                 Surface{
-                    RegistroScreen()
+                    //RegistroScreen()
                 }
             }
         }
@@ -48,7 +48,7 @@ class RegistroActivity : ComponentActivity() {
 }
 
 @Composable
-fun RegistroScreen() {
+fun RegistroScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .padding(
@@ -69,7 +69,9 @@ fun RegistroScreen() {
                 contentAlignment = Alignment.CenterStart
             ) {
                 BackButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navController.popBackStack()
+                    },
                     icon = Icons.Default.ArrowBack,
                     contentDescription = "Arrow back icon"
                 )
@@ -151,5 +153,5 @@ fun RegistroScreen() {
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 fun RegistroScreenPreview() {
-    RegistroScreen()
+    //RegistroScreen()
 }

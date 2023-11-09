@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.boeteste.R
 import com.example.boeteste.components.defaultButton.DefaultButton
 import com.example.boeteste.components.labeledInput.LabeledInput
@@ -40,7 +44,7 @@ class LoginActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Surface {
-                    LoginScreen()
+                    //LoginScreen()
                 }
             }
         }
@@ -48,19 +52,19 @@ class LoginActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    navController: NavHostController,
+    onLoginSuccess: () -> Unit
+) {
     Column(
         modifier = Modifier
-            .padding(
-                vertical = 73.dp,
-                horizontal = 33.dp
-            ) // Adicionando um espaçamento geral de 33 pixels
+            .padding(33.dp)
             .fillMaxHeight(),
         verticalArrangement = Arrangement.Center
     ) {
 
         Column(modifier = Modifier
-            .padding(vertical = 33.dp)
+            .padding(vertical = 23.dp)
             .fillMaxWidth()
         ) {
             Row(
@@ -68,11 +72,16 @@ fun LoginScreen() {
                     .align(Alignment.End),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Image(
+                Icon(
                     painter = painterResource(R.drawable.boe_symbol),
-                    contentDescription = "Boe Símbolo"
+                    contentDescription = "Boe Símbolo",
+                    tint = PrimaryBlue,
+                    modifier = Modifier
+                        .size(43.dp)
                 )
             }
+
+            Spacer(modifier = Modifier.height(23.dp))
 
             MixedTitle(
                 parteNegrito = "Bem-vindo",
@@ -100,23 +109,30 @@ fun LoginScreen() {
                 onValueChange = {}
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(13.dp))
 
             Row(
                 modifier = Modifier
                     .align(Alignment.End)
             ) {
                 LinkText(
-                    linkText = "Equeci minha senha"
+                    linkText = "Equeci minha senha",
+                    modifier = Modifier
                 )
             }
         }
 
+        Spacer(modifier = Modifier.height(23.dp))
+
         DefaultButton(
-            onClick = { /*TODO*/ },
+            onClick = {
+                onLoginSuccess()
+            },
             text = "Log in",
             backgroundColor = PrimaryBlue
         )
+
+        Spacer(modifier = Modifier.height(23.dp))
 
         Column(
             modifier = Modifier
@@ -134,7 +150,13 @@ fun LoginScreen() {
                 )
             )
 
-            LinkText(linkText = "Registre-se")
+            LinkText(
+                linkText = "Registre-se",
+                modifier = Modifier
+                    .clickable {
+                        navController.navigate("register")
+                    }
+            )
         }
     }
 }
@@ -142,5 +164,5 @@ fun LoginScreen() {
 @Preview(showBackground = true, widthDp = 400)
 @Composable
 fun LoginPreview(){
-    LoginScreen()
+    //LoginScreen()
 }

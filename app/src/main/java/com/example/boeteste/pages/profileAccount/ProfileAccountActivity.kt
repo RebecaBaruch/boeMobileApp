@@ -48,7 +48,10 @@ class ProfileAccountActivity : ComponentActivity() {
 }
 
 @Composable
-fun ProfileAccountScreen(navController: NavHostController) {
+fun ProfileAccountScreen(
+    navController: NavHostController,
+    onLogout: () -> Unit
+) {
     Column(
         modifier = Modifier
             .padding(33.dp),
@@ -138,7 +141,7 @@ fun ProfileAccountScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(33.dp))
 
         ExitButton {
-            /**/
+            onLogout()
         }
     }
 }
