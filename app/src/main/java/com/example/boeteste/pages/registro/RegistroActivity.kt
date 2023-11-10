@@ -1,6 +1,8 @@
 package com.example.boeteste.pages.registro
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,12 +29,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.boeteste.ApiService
+import com.example.boeteste.NetworkUtils
 import com.example.boeteste.R
+import com.example.boeteste.classes.UsuarioRegisterRequest
+import com.example.boeteste.classes.UsuarioRegisterResponse
 import com.example.boeteste.components.backButton.BackButton
 import com.example.boeteste.components.defaultButton.DefaultButton
 import com.example.boeteste.components.labeledInput.LabeledInput
 import com.example.boeteste.pages.registro.ui.theme.BoeTesteTheme
 import com.example.boeteste.ui.theme.PrimaryBlue
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegistroActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +58,42 @@ class RegistroActivity : ComponentActivity() {
                     //RegistroScreen()
                 }
             }
+        }
+    }
+}
+
+fun onRegisterClick(
+    coroutine: CoroutineScope,
+    name: String,
+    email: String,
+    password: String,
+    context: Context,
+    onResponse: (UsuarioRegisterResponse?, Throwable?) -> Unit
+) {
+    val apiService = NetworkUtils.getRetrofitInstance().create(ApiService::class.java)
+
+    val usuarioRegisterData = UsuarioRegisterRequest(name, email, password)
+    val body = Gson().toJson(usuarioRegisterData)
+        .toRequestBody("application/json; charset=UTF-8".toMediaType())
+
+    coroutine.launch {
+        val call = apiService.cadastrarUsuario(body)
+
+        try {
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+            })
+        } catch (e: Exception) {
+            Log.d("CatchError", e.message.toString())
         }
     }
 }

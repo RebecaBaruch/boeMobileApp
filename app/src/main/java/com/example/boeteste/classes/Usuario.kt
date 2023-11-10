@@ -2,6 +2,18 @@ package com.example.boeteste.classes
 
 import com.google.gson.annotations.SerializedName
 
+data class UsuarioRegisterRequest (
+    @SerializedName("name") val nome: String,
+    @SerializedName("email") val email: String,
+    @SerializedName("password") val senha: String,
+)
+
+data class UsuarioRegisterResponse (
+    val mensagem: String,
+    @SerializedName("idUsuario") val id: String,
+    val status: Int,
+)
+
 data class UsuarioLoginRequest (
     @SerializedName("email") val email: String,
     @SerializedName("password") val senha: String,
