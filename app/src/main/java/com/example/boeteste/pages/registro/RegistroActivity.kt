@@ -22,8 +22,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -114,6 +120,14 @@ fun onRegisterClick(
 
 @Composable
 fun RegistroScreen(navController: NavHostController) {
+    var nome by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var senha by rememberSaveable { mutableStateOf("") }
+    var confirmarSenha by rememberSaveable { mutableStateOf("") }
+
+    val coroutineScope = rememberCoroutineScope()
+    val thisContext = LocalContext.current
+
     Column(
         modifier = Modifier
             .padding(
@@ -179,36 +193,54 @@ fun RegistroScreen(navController: NavHostController) {
             LabeledInput(
                 icon = R.drawable.user_gray_icon,
                 label = "Nome",
-                value = "",
-                onValueChange = {}
+                value = nome,
+                onValueChange = { nome = it }
             )
 
             //email
             LabeledInput(
                 icon = R.drawable.email_icon,
                 label = "Email",
-                value = "",
-                onValueChange = {}
+                value = email,
+                onValueChange = { email = it }
             )
 
             //Senha
             LabeledInput(
                 icon = R.drawable.key_icon,
                 label = "Senha",
-                value = "",
-                onValueChange = {}
+                value = senha,
+                onValueChange = { senha = it }
             )
 
             //Confirmar senha
             LabeledInput(
                 label = "Confirmar senha",
-                value = "",
-                onValueChange = {}
+                value = confirmarSenha,
+                onValueChange = { confirmarSenha = it }
             )
         }
 
         DefaultButton(
-            onClick = { /*TODO*/ },
+            onClick = {
+                      if (senha.equals(confirmarSenha)) {
+                          onRegisterClick(
+                              coroutineScope,
+                              nome,
+                              email,
+                              senha,
+                              thisContext
+                          ) {res, error ->
+                              if (res !== null) {
+                                  Log.d("BoeRegister", res.mensagem)
+                              } else {
+                                  Log.d("BoeRegisterError", error?.message.toString())
+                              }
+                          }
+                      } else {
+                          Toast.makeText(thisContext, "As senhas estão diferentes.", Toast.LENGTH_SHORT).show()
+                      }
+            },
             text = "Registrar-se",
             backgroundColor = PrimaryBlue
         )

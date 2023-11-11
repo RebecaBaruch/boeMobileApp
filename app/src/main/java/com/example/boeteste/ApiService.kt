@@ -1,5 +1,6 @@
 package com.example.boeteste
 
+import com.example.boeteste.classes.UsuarioUpdateShowDataGet
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -26,7 +27,7 @@ interface ApiService {
 
     @GET("updateUser/{idUser}")
     @Headers("Content-Type:application/json")
-    fun exibirDadosUsuarioAtualizar(@Path("idUser") id: String): Call<ResponseBody>
+    fun exibirDadosUsuarioAtualizar(@Path("idUser") id: String): Call<UsuarioUpdateShowDataGet>
 
     @PUT("updateUser/{idUser}")
     @Headers("Content-Type:application/json")

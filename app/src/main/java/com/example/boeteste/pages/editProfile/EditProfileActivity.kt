@@ -145,7 +145,7 @@ fun exibirDadosAtualizar(): LiveData<UsuarioUpdateShowDataGet?> {
             liveData.postValue(response.body())
         }
 
-        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+        override fun onFailure(call: Call<UsuarioUpdateShowDataGet?>, t: Throwable) {
             liveData.postValue(null)
         }
     })
