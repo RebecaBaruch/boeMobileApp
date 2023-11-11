@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Space
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -85,11 +86,24 @@ fun onRegisterClick(
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    TODO("Not yet implemented")
+                    if (response.isSuccessful) {
+                        val receivedMessage = response.body()?.string()
+                        val resBody = Gson().fromJson(receivedMessage, UsuarioRegisterResponse::class.java)
+
+                        onResponse(resBody, null)
+
+                        Toast.makeText(context, "Seu cadastro foi efetuado com sucesso!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val errorMessage = response.errorBody()?.string()
+
+                        onResponse(null, RuntimeException(errorMessage))
+
+                        Toast.makeText(context, "Não foi possível cadastrar usuário.", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    TODO("Not yet implemented")
+                    onResponse(null, t)
                 }
             })
         } catch (e: Exception) {

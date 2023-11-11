@@ -1,6 +1,8 @@
 package com.example.boeteste.pages
 
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -20,9 +22,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,13 +40,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
+import com.example.boeteste.ApiService
+import com.example.boeteste.NetworkUtils
 import com.example.boeteste.R
+import com.example.boeteste.classes.UsuarioMenuViewModelResponse
 import com.example.boeteste.components.header.Header
 import com.example.boeteste.components.mixedTitle.MixedTitle
 import com.example.boeteste.components.navMenu.NavItem
 import com.example.boeteste.components.navMenu.NavMenu
 import com.example.boeteste.pages.ui.theme.BoeTesteTheme
+import com.google.gson.Gson
+import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,8 +75,48 @@ class HomeActivity : ComponentActivity() {
     }
 }
 
+fun exibirUsuarioDadosMenu(context: Context, id: String, menuViewModel: ViewModel, onResponse: (UsuarioMenuViewModelResponse?, Throwable?) -> Unit) {
+    val apiService = NetworkUtils.getRetrofitInstance().create(ApiService::class.java)
+
+    val call = apiService.exibirDadosUsuarioMenu("")
+
+    call.enqueue(object : Callback<ResponseBody> {
+        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            if (response.isSuccessful) {
+                val receivedMessage = response.body()?.string()
+                val resBody = Gson().fromJson(receivedMessage, UsuarioMenuViewModelResponse::class.java)
+
+                onResponse(resBody, null)
+
+                Toast.makeText(context, "Exibindo dados!", Toast.LENGTH_SHORT).show()
+            } else {
+                val errorMessage = response.errorBody()?.string()
+
+                onResponse(null, RuntimeException(errorMessage))
+
+                Toast.makeText(context, "Não foi possível exibir os dados.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            TODO("Not yet implemented")
+        }
+    })
+}
+
 @Composable
 fun HomeScreen(){
+    var viewMenuData by remember { mutableStateOf(UsuarioMenuViewModelResponse()) }
+    val coroutineScope = rememberCoroutineScope()
+
+    DisposableEffect(Unit) {
+        coroutineScope.launch {
+            try {
+
+            } catch (e: Exception) {}
+        }
+    }
+    
     Column(
         modifier = Modifier
             .padding(

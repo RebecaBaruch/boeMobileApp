@@ -32,6 +32,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,6 +53,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.NavHostController
 import com.example.boeteste.ApiService
 import com.example.boeteste.NetworkUtils
@@ -58,6 +63,7 @@ import retrofit2.Callback
 import com.example.boeteste.R
 import com.example.boeteste.classes.UsuarioUpdateRequest
 import com.example.boeteste.classes.UsuarioUpdateResponse
+import com.example.boeteste.classes.UsuarioUpdateShowDataGet
 import com.example.boeteste.components.backButton.BackButton
 import com.example.boeteste.components.labeledInput.LabeledInput
 import com.example.boeteste.pages.editProfile.components.ExcludeAccountButton
@@ -65,6 +71,7 @@ import com.example.boeteste.pages.editProfile.ui.theme.BoeTesteTheme
 import com.example.boeteste.ui.theme.PatternGray
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -126,6 +133,26 @@ fun onEditClick(coroutine: CoroutineScope, name: String, email: String, password
         }
     }
 }
+
+fun exibirDadosAtualizar(): LiveData<UsuarioUpdateShowDataGet?> {
+    val apiService = NetworkUtils.getRetrofitInstance().create(ApiService::class.java)
+    val liveData = MutableLiveData<UsuarioUpdateShowDataGet?>()
+
+    val call = apiService.exibirDadosUsuarioAtualizar("")
+
+    call.enqueue(object : Callback<UsuarioUpdateShowDataGet?> {
+        override fun onResponse(call: Call<UsuarioUpdateShowDataGet?>, response: Response<UsuarioUpdateShowDataGet?>) {
+            liveData.postValue(response.body())
+        }
+
+        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            liveData.postValue(null)
+        }
+    })
+
+    return liveData
+}
+
 
 @Composable
 fun EditProfileScreen(
