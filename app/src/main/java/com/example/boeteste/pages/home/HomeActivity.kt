@@ -42,6 +42,7 @@ import com.example.boeteste.components.mixedTitle.MixedTitle
 import com.example.boeteste.pages.home.MenuResponse
 import com.example.boeteste.pages.home.MenuViewModel
 import com.example.boeteste.pages.ui.theme.BoeTesteTheme
+import com.example.boeteste.utils.GlobalState
 import kotlinx.coroutines.launch
 
 class HomeActivity : ComponentActivity() {
@@ -63,6 +64,7 @@ class HomeActivity : ComponentActivity() {
 
 @Composable
 fun HomeScreen(){
+    val dadoIdUsuario = GlobalState.dadosCompartilhados.value
     val menuViewModel: MenuViewModel = viewModel()
     val remoteDataSrc: MenuResponse by lazy { MenuResponse() }
     val thisContext = LocalContext.current
@@ -71,7 +73,7 @@ fun HomeScreen(){
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
-            remoteDataSrc.exibirMenuDadosUsuario("654b6c384e37cb2cd3604b4a") {res, error ->
+            remoteDataSrc.exibirMenuDadosUsuario(dadoIdUsuario) {res, error ->
                 if (res != null) {
                     menuViewModel.userName = res.userName
                     menuViewModel.registeredCases = res.registeredCases

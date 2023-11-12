@@ -35,7 +35,7 @@ fun LabeledInput(
     icon: Int? = null,
     onValueChange: (String) -> Unit
 ) {
-    var text by remember { mutableStateOf("") }
+    var text by remember { mutableStateOf(value) }
 
     Column(
         modifier = Modifier.padding(vertical = 13.dp)

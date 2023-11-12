@@ -27,7 +27,7 @@ interface ApiService {
 
     @GET("updateUser/{idUser}")
     @Headers("Content-Type:application/json")
-    fun exibirDadosUsuarioAtualizar(@Path("idUser") id: String): Call<UsuarioUpdateShowDataGet>
+    fun exibirDadosUsuarioAtualizar(@Path("idUser") id: String): Call<ResponseBody>
 
     @PUT("updateUser/{idUser}")
     @Headers("Content-Type:application/json")

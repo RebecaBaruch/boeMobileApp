@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -56,6 +57,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.boeteste.ApiService
 import com.example.boeteste.NetworkUtils
@@ -69,6 +71,7 @@ import com.example.boeteste.components.labeledInput.LabeledInput
 import com.example.boeteste.pages.editProfile.components.ExcludeAccountButton
 import com.example.boeteste.pages.editProfile.ui.theme.BoeTesteTheme
 import com.example.boeteste.ui.theme.PatternGray
+import com.example.boeteste.utils.GlobalState
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
@@ -96,7 +99,7 @@ class EditProfileActivity : ComponentActivity() {
     }
 }
 
-fun onEditClick(coroutine: CoroutineScope, name: String, email: String, password: String, context: Context, onResponse: (UsuarioUpdateResponse?, Throwable?) -> Unit) {
+fun onEditClick(coroutine: CoroutineScope, id: String, name: String, email: String, password: String, context: Context, onResponse: (UsuarioUpdateResponse?, Throwable?) -> Unit) {
     val apiService = NetworkUtils.getRetrofitInstance().create(ApiService::class.java)
 
     val usuarioUpdatedData = UsuarioUpdateRequest(name, email, password)
@@ -104,7 +107,7 @@ fun onEditClick(coroutine: CoroutineScope, name: String, email: String, password
         .toRequestBody("application/json; charset=UTF-8".toMediaType())
 
     coroutine.launch {
-        val call = apiService.atualizarDadosUsuario("654b6c384e37cb2cd3604b4a", body)
+        val call = apiService.atualizarDadosUsuario(id, body)
 
         try {
             call.enqueue(object : Callback<ResponseBody> {
@@ -134,23 +137,29 @@ fun onEditClick(coroutine: CoroutineScope, name: String, email: String, password
     }
 }
 
-fun exibirDadosAtualizar(): LiveData<UsuarioUpdateShowDataGet?> {
-    val apiService = NetworkUtils.getRetrofitInstance().create(ApiService::class.java)
-    val liveData = MutableLiveData<UsuarioUpdateShowDataGet?>()
+fun onDeleteClick(coroutine: CoroutineScope, id: String, onDeleteClick: () -> Unit, context: Context) {
+    val apiService = NetworkUtils.getApiService()
 
-    val call = apiService.exibirDadosUsuarioAtualizar("")
+    coroutine.launch {
+        val call = apiService.deletarUsuario(id)
 
-    call.enqueue(object : Callback<UsuarioUpdateShowDataGet?> {
-        override fun onResponse(call: Call<UsuarioUpdateShowDataGet?>, response: Response<UsuarioUpdateShowDataGet?>) {
-            liveData.postValue(response.body())
+        try {
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    onDeleteClick()
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(context, "Não foi possível deletar sua conta.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } catch (e: Exception) {
+            Log.d("CatchErrorEditProfile", e.message.toString())
         }
-
-        override fun onFailure(call: Call<UsuarioUpdateShowDataGet?>, t: Throwable) {
-            liveData.postValue(null)
-        }
-    })
-
-    return liveData
+    }
 }
 
 
@@ -159,21 +168,32 @@ fun EditProfileScreen(
     navController: NavHostController,
     onLogout: () -> Unit
 ) {
-    var nome by rememberSaveable { mutableStateOf("") }
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-
-    val coroutineScope = rememberCoroutineScope()
-    val handler = remember { Handler(Looper.getMainLooper()) }
+    val dadoIdUsuario = GlobalState.dadosCompartilhados.value
+    val editViewModel: EditProfileViewModel = viewModel()
+    val remoteDataSrc: EditResponse by lazy { EditResponse() }
     val thisContext = LocalContext.current
 
+    val coroutineScope = rememberCoroutineScope()
+
+    var nome by rememberSaveable { mutableStateOf(editViewModel.name) }
+    var email by rememberSaveable { mutableStateOf(editViewModel.email) }
+    var password by rememberSaveable { mutableStateOf(editViewModel.password) }
+
+    val handler = remember { Handler(Looper.getMainLooper()) }
+
     val onApiCall: (String) -> Unit = {input ->
-        coroutineScope.launch {
-            onEditClick(coroutineScope, nome, email, password, thisContext) {response, error ->
-                if (response !== null) {
-                    Log.d("BoeEdit", response.mensagem)
-                } else {
-                    Log.d("BoeEditError", error?.message.toString())
+        if (
+            editViewModel.name != nome ||
+            editViewModel.email != email ||
+            editViewModel.password != password
+            ) {
+            coroutineScope.launch {
+                onEditClick(coroutineScope, dadoIdUsuario, nome!!, email!!, password!!, thisContext) {response, error ->
+                    if (response !== null) {
+                        Log.d("BoeEdit", response.mensagem)
+                    } else {
+                        Log.d("BoeEditError", error?.message.toString())
+                    }
                 }
             }
         }
@@ -187,6 +207,21 @@ fun EditProfileScreen(
             )
             .fillMaxHeight()
     ) {
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                remoteDataSrc.exibirAtualizarDadosUsuario(dadoIdUsuario) {res, error ->
+                    if (res != null) {
+                        editViewModel.name = res.name
+                        editViewModel.email = res.email
+                        editViewModel.password = res.password
+
+                        nome = res.name
+                        email = res.email
+                        password = res.password
+                    }
+                }
+            }
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -230,7 +265,7 @@ fun EditProfileScreen(
             LabeledInput(
                 icon = R.drawable.user_gray_icon,
                 label = "Nome",
-                value = nome,
+                value = nome!!,
                 onValueChange = {
                     nome = it
 
@@ -243,7 +278,7 @@ fun EditProfileScreen(
             LabeledInput(
                 icon = R.drawable.email_icon,
                 label = "Email",
-                value = email,
+                value = email!!,
                 onValueChange = {
                     email = it
 
@@ -278,13 +313,13 @@ fun EditProfileScreen(
         Spacer(modifier = Modifier.height(13.dp))
 
         val visualPassword = buildAnnotatedString {
-            repeat(password.length) {
+            repeat(password!!.length) {
                 append("•")
             }
         }
 
         TextField(
-            value = password,
+            value = password!!,
             onValueChange = {
                             password = it
 
@@ -317,7 +352,7 @@ fun EditProfileScreen(
         Spacer(modifier = Modifier.height(53.dp))
 
         ExcludeAccountButton {
-            onLogout()
+            onDeleteClick(coroutineScope, dadoIdUsuario, onLogout, thisContext)
         }
     }
 }

@@ -50,6 +50,7 @@ import com.example.boeteste.components.linkText.LinkText
 import com.example.boeteste.components.mixedTitle.MixedTitle
 import com.example.boeteste.ui.theme.PatternGray
 import com.example.boeteste.ui.theme.PrimaryBlue
+import com.example.boeteste.utils.GlobalState
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -100,6 +101,7 @@ fun onLoginClick(
                         val receivedMessage = response.body()?.string()
                         val resBody = Gson().fromJson(receivedMessage, UsuarioLoginResponse::class.java)
 
+                        GlobalState.dadosCompartilhados.value = resBody.dadosUsuario.id
                         onResponse(resBody, null)
                         onLoginSuccess()
 
