@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class NetworkUtils {
     companion object {
-        val baseUrl = "http://10.0.2.2:5000/"
+        val baseUrl = "https://boeapp.onrender.com/"
         fun getRetrofitInstance(): Retrofit {
             val logging = HttpLoggingInterceptor()
             logging.level = (HttpLoggingInterceptor.Level.BODY)
