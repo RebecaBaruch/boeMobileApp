@@ -1,6 +1,7 @@
 package com.example.boeteste.pages
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,10 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,18 +29,21 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.boeteste.R
 import com.example.boeteste.components.header.Header
 import com.example.boeteste.components.mixedTitle.MixedTitle
-import com.example.boeteste.components.navMenu.NavItem
-import com.example.boeteste.components.navMenu.NavMenu
+import com.example.boeteste.pages.home.MenuResponse
+import com.example.boeteste.pages.home.MenuViewModel
 import com.example.boeteste.pages.ui.theme.BoeTesteTheme
+import com.example.boeteste.utils.GlobalState
+import kotlinx.coroutines.launch
 
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +64,29 @@ class HomeActivity : ComponentActivity() {
 
 @Composable
 fun HomeScreen(){
+    val dadoIdUsuario = GlobalState.dadosCompartilhados.value
+    val menuViewModel: MenuViewModel = viewModel()
+    val remoteDataSrc: MenuResponse by lazy { MenuResponse() }
+    val thisContext = LocalContext.current
+
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
+            remoteDataSrc.exibirMenuDadosUsuario(dadoIdUsuario) {res, error ->
+                if (res != null) {
+                    menuViewModel.userName = res.userName
+                    menuViewModel.registeredCases = res.registeredCases
+                    menuViewModel.positiveCases = res.positiveCases
+
+                    Toast.makeText(thisContext, "Exibindo seus dados!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(thisContext, "Não foi possível exibir seus dados.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .padding(
@@ -77,7 +101,7 @@ fun HomeScreen(){
 
             MixedTitle(
                 parteNegrito = "Olá,",
-                parteLeve = "Rebeca!",
+                parteLeve = "${menuViewModel.userName}!",
                 fontSize = 33,
                 quebrarTexto = false,
                 boldFirst = true,
@@ -94,14 +118,14 @@ fun HomeScreen(){
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TotalRegisterBox(
-                    totalRegisterNum = 7,
+                    totalRegisterNum = menuViewModel.registeredCases,
                     modifier = Modifier.weight(1f)
                 )
 
                 Spacer(modifier = Modifier.width(23.dp))
 
                 PositiveRegisteredBox(
-                    totalPositiveNum = 30,
+                    totalPositiveNum = menuViewModel.positiveCases,
                     posAddNum = 10,
                     negAddnum = 17,
                     modifier = Modifier.weight(1f)

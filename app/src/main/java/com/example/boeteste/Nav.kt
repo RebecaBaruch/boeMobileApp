@@ -23,7 +23,9 @@ import com.example.boeteste.pages.registro.RegistroScreen
 @Composable
 fun Nav(){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "home" ){
+
+    var isAuthenticated by remember { mutableStateOf(false) }
+    NavHost(navController = navController, startDestination = if (isAuthenticated) "home" else "login" ){
         composable(route = "home"){
             Column(
                 modifier = Modifier.fillMaxHeight(),
@@ -40,18 +42,23 @@ fun Nav(){
             }
         }
         composable(route = "login"){
-            LoginScreen()
+            LoginScreen(
+                navController = navController,
+                onLoginSuccess = { isAuthenticated = true }
+            )
         }
         composable(route = "register"){
-            RegistroScreen()
-
+            RegistroScreen(navController = navController)
         }
         composable(route = "profileAccount"){
             Column(
                 modifier = Modifier.fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween
             ){
-                ProfileAccountScreen(navController)
+                ProfileAccountScreen(
+                    navController = navController,
+                    onLogout = { isAuthenticated = false }
+                )
                 var selectedNavItem by remember { mutableStateOf(NavItem.PROFILE) }
                 NavMenu(
                     selectedNavItem = selectedNavItem,
@@ -61,7 +68,10 @@ fun Nav(){
             }
         }
         composable(route = "editProfileAccount"){
-            EditProfileScreen(navController)
+            EditProfileScreen(
+                navController = navController,
+                onLogout = {isAuthenticated = false}
+            )
         }
     }
 }
