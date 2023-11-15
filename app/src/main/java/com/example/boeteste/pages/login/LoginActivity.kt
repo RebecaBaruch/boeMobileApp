@@ -105,18 +105,20 @@ fun onLoginClick(
                         onResponse(resBody, null)
                         onLoginSuccess()
 
-                        Toast.makeText(context, "Entrando em sua conta...", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, resBody.mensagem, Toast.LENGTH_SHORT).show()
                     } else {
                         val errorMessage = response.errorBody()?.string()
 
                         onResponse(null, RuntimeException(errorMessage))
 
-                        Toast.makeText(context, "Não foi possível entrar em sua conta.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onResponse(null, t)
+
+                    Toast.makeText(context, "Não foi possível conectar-se... Aguarde!", Toast.LENGTH_SHORT).show()
                 }
             })
         } catch (e: Exception) {
