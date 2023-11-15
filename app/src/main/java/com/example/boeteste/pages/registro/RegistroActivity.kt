@@ -98,18 +98,21 @@ fun onRegisterClick(
 
                         onResponse(resBody, null)
 
-                        Toast.makeText(context, "Seu cadastro foi efetuado com sucesso!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, resBody.mensagem, Toast.LENGTH_SHORT).show()
                     } else {
                         val errorMessage = response.errorBody()?.string()
+                        val resBody = Gson().fromJson(errorMessage, UsuarioRegisterResponse::class.java)
 
                         onResponse(null, RuntimeException(errorMessage))
 
-                        Toast.makeText(context, "Não foi possível cadastrar usuário.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, resBody.mensagem, Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     onResponse(null, t)
+
+                    Toast.makeText(context, "Não foi possível conectar-se... Aguarde!", Toast.LENGTH_SHORT).show()
                 }
             })
         } catch (e: Exception) {
