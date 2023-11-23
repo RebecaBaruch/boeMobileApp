@@ -108,10 +108,11 @@ fun onLoginClick(
                         Toast.makeText(context, resBody.mensagem, Toast.LENGTH_SHORT).show()
                     } else {
                         val errorMessage = response.errorBody()?.string()
+                        val resBody = Gson().fromJson(errorMessage, UsuarioLoginResponse::class.java)
 
-                        onResponse(null, RuntimeException(errorMessage))
+                        onResponse(null, RuntimeException(resBody.mensagem))
 
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, resBody.mensagem, Toast.LENGTH_SHORT).show()
                     }
                 }
 
