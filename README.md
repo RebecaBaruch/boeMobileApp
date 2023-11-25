@@ -18,7 +18,7 @@ Caso o projeto apresentar falhas de conexão, instale a API localmente, seguindo
 <p>Execute o seguinte comando em seu terminal Git Bash para instalar este projeto:</p>
 
 ```
-git clone https://github.com/RebecaBaruch/boe_app.git
+git clone https://github.com/isefshondo/boe-app.git
 ```
 
 <p>Depois de clonar o repositório, instale suas dependências:</p>
