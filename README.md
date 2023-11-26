@@ -13,7 +13,9 @@ Em seguida, abra o repositório clonado na ferramenta <strong><em>Android Studio
 
 Caso escolha a opção (1), ative o modo de desenvolvedor de seu dispositivo e certifique-se de que é o seu dispositivo que está selecionado como o dispositivo alvo. Após, apenas é preciso executar o projeto.
 Caso escolha a opção (2), execute o projeto, mas certifique-se de que o emulador está conectado a uma rede Wifi.
-Caso o projeto apresentar falhas de conexão, instale a API localmente, seguindo os passos abaixo:
+
+### A aplicação apresentou falhas de conexão? Talvez seja um problema no servidor. Neste caso, siga os passos abaixo:
+Instale a API localmente, seguindo os passos abaixo:
 
 <p>Execute o seguinte comando em seu terminal Git Bash para instalar este projeto:</p>
 
@@ -47,4 +49,9 @@ py app.py
 
 Após todo esse processo a aplicação deve rodar normalmente.
 
-Depois apenas abra o projeto no Android Studio e execute-o.
+Depois apenas abra o projeto no Android Studio, abra seu Terminal e digite o seguinte comando:
+```
+git checkout isabelleFinalBranch
+```
+
+Em seguida, execute a aplicação.
