@@ -54,4 +54,4 @@ Depois apenas abra o projeto no Android Studio, abra seu Terminal e digite o seg
 git checkout isabelleFinalBranch
 ```
 
-Em seguida, execute a aplicação.
+Em seguida, execute a aplicação no emulador.
